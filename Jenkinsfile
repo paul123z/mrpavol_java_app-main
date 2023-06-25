@@ -4,7 +4,7 @@ pipeline{
         stage('Git Checkout'){
             steps{
                 script{
-                    git branch: 'master', url: 'https://github.com/vikash-kumar01/mrdevops_java_app.git'
+                    git branch: 'master', url: 'https://github.com/paul123z/mrpavol_java_app-main.git'
                 }
             }
         }
