@@ -3,6 +3,12 @@
 pipeline{
     agent any  
 
+    environment {
+                    def currentDate = new Date().format('yyyyMMdd')
+                    def currentTime = new Date().format('HHmmss')
+                    def imageTag = "${currentDate}-${currentTime}-${env.BUILD_ID}"
+    }
+
     parameters{
 
         
