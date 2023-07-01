@@ -5,13 +5,12 @@ pipeline{
 
     parameters{
 
-        withCredentials([string(credentialsId: 'AWS_ID_PAVOL', variable: 'AWS_ID_PAVOL')]) {
-
+        
             choice(name: 'action', choices: 'create\ndelete', description: "Choose create/destroy")
             string(name: 'aws_account_id', description: "AWS account id", defaultValue: "${AWS_ID_PAVOL}")
             string(name: 'region', description: "name of the ECR region", defaultValue: "eu-central-1")
             string(name: 'ecr_repoName', description: "name of the ECR repository", defaultValue: "pavol12")
-}
+
 
     }
 
@@ -109,8 +108,9 @@ pipeline{
         }}
             steps{
                 script{
-
+withCredentials([string(credentialsId: 'AWS_ID_PAVOL', variable: 'AWS_ID_PAVOL')]) {
                     dockerBuildERC("${params.aws_account_id}","${params.region}","${params.ecr_repoName}")
+}
                 }
                 }
             }
@@ -124,8 +124,9 @@ pipeline{
         }}
             steps{
                 script{
-
+withCredentials([string(credentialsId: 'AWS_ID_PAVOL', variable: 'AWS_ID_PAVOL')]) {
                     dockerImageScan("${params.aws_account_id}","${params.region}","${params.ecr_repoName}")
+}
                 }
                 }
             }
@@ -138,8 +139,9 @@ pipeline{
         }}
             steps{
                 script{
-
+withCredentials([string(credentialsId: 'AWS_ID_PAVOL', variable: 'AWS_ID_PAVOL')]) {
                     dockerImagePushECR("${params.aws_account_id}","${params.region}","${params.ecr_repoName}")
+}
                 }
                 }
             }
@@ -153,8 +155,10 @@ pipeline{
         }}
             steps{
                 script{
+withCredentials([string(credentialsId: 'AWS_ID_PAVOL', variable: 'AWS_ID_PAVOL')]) {
 
                     dockerImageCleanup("${params.aws_account_id}","${params.region}","${params.ecr_repoName}")
+                    }
                 }
                 }
             }
