@@ -7,6 +7,8 @@ pipeline{
                     def currentDate = new Date().format('yyyyMMdd')
                     def currentTime = new Date().format('HHmmss')
                     def imageTag = "${currentDate}-${currentTime}-${env.BUILD_ID}"
+                    ACCESS_KEY = credentials('aws_access_key')
+                    SECRET_KEY = credentials ('aws_secret_key')
     }
 
     parameters{
@@ -155,25 +157,43 @@ withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_
             
 
 
-//                     stage('Docker Image Cleanup: ECR'){
-//             when{expression{
-//             params.action == 'create'
-//         }}
-//             steps{
-//                 script{
-// withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
+                    stage('Docker Image Cleanup: ECR'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
+withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
  
 
 
-//                     dockerImageCleanupECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
-//                     }
-//                 }
-//                 }
-//             }
+                    dockerImageCleanupECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
+                    }
+                }
+                }
+            }
 
 
 
 
+
+
+                    stage('Create EKS Cluster : Terraform'){
+   
+            steps{
+                script{
+                    dir('eks_module'){
+                        sh """
+
+                            terraform init
+                            terraform plan -var 'access_key=${ACCESS_KEY}' -var 'secret_key=${SECRET_KEY}' -var region='${params.region}' --var-file=./config/terraform.tfvars
+                            terraform apply -var 'access_key=${ACCESS_KEY}' -var 'secret_key=${SECRET_KEY}' -var region='${params.region}' --var-file=./config/terraform.tfvars --auto-approve
+                        """
+                    }
+
+                }
+                }
+            }
 
 
             
