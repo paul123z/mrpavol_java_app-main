@@ -109,7 +109,7 @@ pipeline{
             steps{
                 script{
 withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
-                    dockerBuildERC("${params.aws_account_id}","${params.region}","${params.ecr_repoName}")
+                    dockerBuildERC("${aws_account_id}","${params.region}","${params.ecr_repoName}")
 }
                 }
                 }
