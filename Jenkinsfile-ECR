@@ -155,21 +155,21 @@ withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_
             
 
 
-                    stage('Docker Image Cleanup: ECR'){
-            when{expression{
-            params.action == 'create'
-        }}
-            steps{
-                script{
-withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
+//                     stage('Docker Image Cleanup: ECR'){
+//             when{expression{
+//             params.action == 'create'
+//         }}
+//             steps{
+//                 script{
+// withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
  
 
 
-                    dockerImageCleanupECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
-                    }
-                }
-                }
-            }
+//                     dockerImageCleanupECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
+//                     }
+//                 }
+//                 }
+//             }
 
 
 
