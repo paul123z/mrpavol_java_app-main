@@ -125,7 +125,7 @@ withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_
             steps{
                 script{
 withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
-                    dockerImageScan("${params.aws_account_id}","${params.region}","${params.ecr_repoName}")
+                    dockerImageScan("${aws_account_id}","${params.region}","${params.ecr_repoName}")
 }
                 }
                 }
@@ -140,7 +140,7 @@ withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_
             steps{
                 script{
 withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
-                    dockerImagePushECR("${params.aws_account_id}","${params.region}","${params.ecr_repoName}")
+                    dockerImagePushECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
 }
                 }
                 }
@@ -159,7 +159,7 @@ withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_
  
 
 
-                    dockerImageCleanup("${params.aws_account_id}","${params.region}","${params.ecr_repoName}")
+                    dockerImageCleanup("${aws_account_id}","${params.region}","${params.ecr_repoName}")
                     }
                 }
                 }
