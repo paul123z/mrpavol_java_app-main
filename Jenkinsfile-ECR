@@ -231,6 +231,9 @@ pipeline{
          }}
             steps{
                 script{
+
+
+                withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
                     def apply = false
 
                     try{
@@ -245,6 +248,7 @@ pipeline{
                         sh 'kubectl set image deployment/myjavaapp-deployment myjavaapp=${aws_account_id}.dkr.ecr.eu-central-1.amazonaws.com/pavol12:latest'
                         kubectl apply -f .
                         """
+                    }
                     }                      
                     
                 }
