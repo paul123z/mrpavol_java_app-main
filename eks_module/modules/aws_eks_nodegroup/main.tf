@@ -59,9 +59,7 @@ resource "aws_eks_node_group" "nodes_general" {
 
 # Create IAM role for EKS Node Group
 resource "aws_iam_role" "nodes_general" {
-   force_detach_policies = true
-  delete_with_elasticache_replication_group = true
-  delete_with_db_instance = true
+
   # The name of the role
   name = var.node_group_name
 
