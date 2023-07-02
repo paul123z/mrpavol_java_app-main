@@ -245,12 +245,13 @@ pipeline{
                     }
                     if(apply){
                         sh """
+                        echo ${aws_account_id}
                         sh 'kubectl set image deployment/myjavaapp-deployment myjavaapp=${aws_account_id}.dkr.ecr.eu-central-1.amazonaws.com/pavol12:latest'
                         kubectl apply -f .
                         """
                     }
                     }                      
-                    
+
                 }
                 }
             }
