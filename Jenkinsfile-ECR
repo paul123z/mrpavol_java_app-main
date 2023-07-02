@@ -18,6 +18,7 @@ pipeline{
             //string(name: 'aws_account_id', description: "AWS account id", defaultValue: "")
             string(name: 'region', description: "name of the ECR region", defaultValue: "eu-central-1")
             string(name: 'ecr_repoName', description: "name of the ECR repository", defaultValue: "pavol12")
+            string(name: 'cluster', description: "name of the EKS Cluster", defaultValue: "demo-cluster1")
 
 
     }
@@ -195,6 +196,26 @@ pipeline{
                 }
             }
 
+
+
+
+                    stage('Connect To EKS Cluster : Terraform'){
+   
+            steps{
+                script{
+                    dir('eks_module'){ 
+                        sh """
+                        aws --version
+                        aws configure set aws_access_key_id ${ACCESS_KEY}
+                        aws configure set aws_secret_access_key ${SECRET_KEY}
+                        aws configure set region ${params.region}
+                        aws eks --region ${params.region} update-kubeconfig --name ${params.cluster}
+                        """
+                    }
+
+                }
+                }
+            }
 
             
 
