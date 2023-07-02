@@ -46,7 +46,7 @@ pipeline{
 //         }}
 //             steps{
 //                 script{
-//                     mvnTest()
+//                     sh 'mvn test'
 //                 }
 //                 }
 //             }
@@ -59,7 +59,7 @@ pipeline{
 //         }}
 //             steps{
 //                 script{
-//                     mvnIntegrationTest()
+//                     sh 'mvn verify -DskipUnitTests'
 //                 }
 //                 }
 //             }
@@ -103,7 +103,7 @@ pipeline{
 //             steps{
 //                 script{
 
-//                     mvnBuild()
+//                     sh 'mvn clean install'
 //                 }
 //                 }
 //             }
