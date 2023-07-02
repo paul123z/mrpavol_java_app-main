@@ -231,7 +231,7 @@ pipeline{
          }}
             steps{
                 script{
-
+//kubectl set image deployment/myjavaapp-deployment myjavaapp=${aws_account_id}.dkr.ecr.eu-central-1.amazonaws.com/pavol12:latest --record
 
                 withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
                     def apply = false
@@ -246,7 +246,8 @@ pipeline{
                     if(apply){
                         sh """
                         echo ${aws_account_id}
-                        kubectl set image deployment/myjavaapp-deployment myjavaapp=${aws_account_id}.dkr.ecr.eu-central-1.amazonaws.com/pavol12:latest
+                        sed -i 's|<aws_account_id>.dkr.ecr.eu-central-1.amazonaws.com/pavol12:latest|${aws_account_id}.dkr.ecr.eu-central-1.amazonaws.com/pavol12:latest|' deployment.yaml
+                      
                         kubectl apply -f .
                         """
                     }
