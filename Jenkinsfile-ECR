@@ -40,139 +40,139 @@ pipeline{
             }
 
 
-//         stage('Unit Test Maven'){
-//             when{expression{
-//             params.action == 'create'
-//         }}
-//             steps{
-//                 script{
-//                     sh 'mvn test'
-//                 }
-//                 }
-//             }
+        stage('Unit Test Maven'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
+                    sh 'mvn test'
+                }
+                }
+            }
 
 
 
-//         stage('Integration Test Maven'){
-//             when{expression{
-//             params.action == 'create'
-//         }}
-//             steps{
-//                 script{
-//                     sh 'mvn verify -DskipUnitTests'
-//                 }
-//                 }
-//             }
+        stage('Integration Test Maven'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
+                    sh 'mvn verify -DskipUnitTests'
+                }
+                }
+            }
 
 
 
-//         stage('Static code analysis: Sonarqube'){
-//             when{expression{
-//             params.action == 'create'
-//         }}
-//             steps{
-//                 script{
+        stage('Static code analysis: Sonarqube'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
 
-//                     def sonarqubeCredentialsId = 'sonarqube-api'
-//                     statiCodeAnalysis(sonarqubeCredentialsId)
-//                 }
-//                 }
-//             }
-
-
-
-//         stage('Quality Gate Status Check: Sonarqube'){
-//             when{expression{
-//             params.action == 'create'
-//         }}
-//             steps{
-//                 script{
-
-//                     def sonarqubeCredentialsId = 'sonarqube-api'
-//                     QualityGateStatus(sonarqubeCredentialsId)
-//                 }
-//                 }
-//             }
+                    def sonarqubeCredentialsId = 'sonarqube-api'
+                    statiCodeAnalysis(sonarqubeCredentialsId)
+                }
+                }
+            }
 
 
 
-//                     stage('Maven Build: maven'){
-//             when{expression{
-//             params.action == 'create'
-//         }}
-//             steps{
-//                 script{
+        stage('Quality Gate Status Check: Sonarqube'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
 
-//                     sh 'mvn clean install'
-//                 }
-//                 }
-//             }
+                    def sonarqubeCredentialsId = 'sonarqube-api'
+                    QualityGateStatus(sonarqubeCredentialsId)
+                }
+                }
+            }
 
 
 
+                    stage('Maven Build: maven'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
 
-//                     stage('Docker Image Build : ECR'){
-//             when{expression{
-//             params.action == 'create'
-//         }}
-//             steps{
-//                 script{
-// withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
-//                     dockerBuildECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
-// }
-//                 }
-//                 }
-//             }
+                    sh 'mvn clean install'
+                }
+                }
+            }
 
 
 
 
-//                     stage('Docker Image Scan: trivy ECR'){
-//             when{expression{
-//             params.action == 'create'
-//         }}
-//             steps{
-//                 script{
-// withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
-//                     dockerImageScanECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
-// }
-//                 }
-//                 }
-//             }
+                    stage('Docker Image Build : ECR'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
+withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
+                    dockerBuildECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
+}
+                }
+                }
+            }
 
 
 
-//                     stage('Docker Image Push: ECR'){
-//             when{expression{
-//             params.action == 'create'
-//         }}
-//             steps{
-//                 script{
-// withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
-//                     dockerImagePushECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
-// }
-//                 }
-//                 }
-//             }
+
+                    stage('Docker Image Scan: trivy ECR'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
+withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
+                    dockerImageScanECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
+}
+                }
+                }
+            }
+
+
+
+                    stage('Docker Image Push: ECR'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
+withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
+                    dockerImagePushECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
+}
+                }
+                }
+            }
 
             
 
 
-//                     stage('Docker Image Cleanup: ECR'){
-//             when{expression{
-//             params.action == 'create'
-//         }}
-//             steps{
-//                 script{
-// withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
+                    stage('Docker Image Cleanup: ECR'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
+withCredentials([string(credentialsId: 'aws_account_id', variable: 'aws_account_id')]) {
  
 
 
-//                     dockerImageCleanupECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
-//                     }
-//                 }
-//                 }
-//             }
+                    dockerImageCleanupECR("${aws_account_id}","${params.region}","${params.ecr_repoName}")
+                    }
+                }
+                }
+            }
 
 
 
