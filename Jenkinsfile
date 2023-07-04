@@ -164,14 +164,18 @@ pipeline{
 
                     def readPomVersion = readMavenPom file: 'pom.xml'
 
-                    nexusArtifactUploader artifacts: [[artifactId: 'kubernetes-configmap-reload', 
+                    nexusArtifactUploader artifacts: 
+                    
+                    [[
+                        artifactId: 'kubernetes-configmap-reload', 
                     classifier: '', 
                     file: 'target/kubernetes-configmap-reload-0.0.1-SNAPSHOT.jar', 
                     type: 'jar']], 
+
                     credentialsId: 'nexus-admin', 
                     groupId: 'com.minikube.sample', 
                     nexusUrl: '18.192.80.50:8081', 
-                    nexusVersion: 'nexus2', 
+                    nexusVersion: 'nexus3', 
                     protocol: 'http', 
                     repository: 'demoapp-release-pavol', 
                     version: "${readPomVersion.version}"
