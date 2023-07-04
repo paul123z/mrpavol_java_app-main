@@ -162,7 +162,7 @@ pipeline{
             steps{
                 script{
 
-                    def readPomVersion = readMavenPom file: 'pom.xml'
+                    //def readPomVersion = readMavenPom file: 'pom.xml'
 
                     nexusArtifactUploader artifacts: [[artifactId: 'kubernetes-configmap-reload', 
                     classifier: '', 
@@ -174,7 +174,7 @@ pipeline{
                     nexusVersion: 'nexus2', 
                     protocol: 'http', 
                     repository: 'demoapp-release-pavol', 
-                    version: "${readPomVersion.version}"
+                    version: "0.0.1"
                 }
                 }
             }
