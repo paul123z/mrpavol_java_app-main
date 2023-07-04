@@ -141,17 +141,17 @@ pipeline{
             
 
 
-                    stage('Docker Image Cleanup: DockerHub'){
-            when{expression{
-            params.action == 'create'
-        }}
-            steps{
-                script{
+        //             stage('Docker Image Cleanup: DockerHub'){
+        //     when{expression{
+        //     params.action == 'create'
+        // }}
+        //     steps{
+        //         script{
 
-                    dockerImageCleanup("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
-                }
-                }
-            }
+        //             dockerImageCleanup("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+        //         }
+        //         }
+        //     }
 
 
 
@@ -164,7 +164,7 @@ pipeline{
 
                     nexusArtifactUploader artifacts: [[artifactId: 'kubernetes-configmap-reload', 
                     classifier: '', 
-                    file: 'target/*.jar', 
+                    //file: 'target/*.jar', 
                     type: 'jar']], 
                     credentialsId: 'nexus-admin', 
                     groupId: 'com.minikube.sample', 
