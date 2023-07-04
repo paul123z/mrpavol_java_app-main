@@ -155,6 +155,30 @@ pipeline{
 
 
 
+                    stage('Uploading Jar artifact: Nexus'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
+
+                    nexusArtifactUploader artifacts: [[artifactId: 'kubernetes-configmap-reload', 
+                    classifier: '', 
+                    file: 'target/*.jar', 
+                    type: 'jar']], 
+                    credentialsId: 'nexus-admin', 
+                    groupId: 'com.minikube.sample', 
+                    nexusUrl: '18.192.80.50:8081', 
+                    nexusVersion: 'nexus2', 
+                    protocol: 'http', 
+                    repository: 'demoapp-release-pavol', 
+                    version: '0.0.1-SNAPSHOT'
+                }
+                }
+            }
+
+
+
 
 
 
