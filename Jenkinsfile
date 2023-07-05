@@ -27,16 +27,16 @@ pipeline{
             }
 
 
-        stage('Unit Test Maven'){
-            when{expression{
-            params.action == 'create'
-        }}
-            steps{
-                script{
-                    mvnTest()
-                }
-                }
-            }
+        // stage('Unit Test Maven'){
+        //     when{expression{
+        //     params.action == 'create'
+        // }}
+        //     steps{
+        //         script{
+        //             mvnTest()
+        //         }
+        //         }
+        //     }
 
 
 
@@ -54,7 +54,7 @@ pipeline{
         //     }
 
 
-        stage('Build and Deploy To Openshift'){
+        stage('Build an image: JKUBE'){
             when{expression{
             params.action == 'create'
         }}
@@ -62,6 +62,18 @@ pipeline{
                 script{
                     sh """
                     mvn package oc:build
+                    """
+                }
+                }
+            }
+
+        stage('Deploy an image: JKUBE'){
+            when{expression{
+            params.action == 'create'
+        }}
+            steps{
+                script{
+                    sh """
                     mvn oc:resource oc:deploy
                     """
                 }

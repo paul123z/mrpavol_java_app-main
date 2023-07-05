@@ -1,0 +1,86 @@
+---
+apiVersion: v1
+kind: List
+items:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      jkube.eclipse.org/git-commit: 9bc6d1a77d008e62f18817caa206af811fea614f
+      app.openshift.io/vcs-ref: JKUBE-BUILD
+      jkube.eclipse.org/git-url: https://github.com/paul123z/mrpavol_java_app-main.git
+      jkube.eclipse.org/scm-url: https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/kubernetes-configmap-reload
+      app.openshift.io/vcs-uri: https://github.com/paul123z/mrpavol_java_app-main.git
+      jkube.eclipse.org/git-branch: JKUBE-BUILD
+      jkube.eclipse.org/scm-tag: HEAD
+    labels:
+      app: kubernetes-configmap-reload
+      provider: jkube
+      version: 0.0.1-SNAPSHOT
+      group: com.minikube.sample
+    name: kubernetes-configmap-reload
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      app: kubernetes-configmap-reload
+      provider: jkube
+      group: com.minikube.sample
+    strategy:
+      rollingParams:
+        timeoutSeconds: 3600
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          jkube.eclipse.org/git-commit: 9bc6d1a77d008e62f18817caa206af811fea614f
+          app.openshift.io/vcs-ref: JKUBE-BUILD
+          jkube.eclipse.org/git-url: https://github.com/paul123z/mrpavol_java_app-main.git
+          jkube.eclipse.org/scm-url: https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/kubernetes-configmap-reload
+          app.openshift.io/vcs-uri: https://github.com/paul123z/mrpavol_java_app-main.git
+          jkube.eclipse.org/git-branch: JKUBE-BUILD
+          jkube.eclipse.org/scm-tag: HEAD
+        labels:
+          app: kubernetes-configmap-reload
+          provider: jkube
+          version: 0.0.1-SNAPSHOT
+          group: com.minikube.sample
+        name: kubernetes-configmap-reload
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: default/kubernetes-configmap-reload:latest
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 180
+            successThreshold: 1
+          name: default-kubernetes-configmap-reload
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            successThreshold: 1
+          securityContext:
+            privileged: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - default-kubernetes-configmap-reload
+        from:
+          kind: ImageStreamTag
+          name: kubernetes-configmap-reload:latest
+      type: ImageChange
