@@ -40,118 +40,146 @@ pipeline{
 
 
 
-        stage('Integration Test Maven'){
+
+
+        // stage('Unit Test Maven'){
+        //     when{expression{
+        //     params.action == 'create'
+        // }}
+        //     steps{
+        //         script{
+        //             mvnTest()
+        //         }
+        //         }
+        //     }
+
+
+        stage('Build and Deploy To Openshift'){
             when{expression{
             params.action == 'create'
         }}
             steps{
                 script{
-                    mvnIntegrationTest()
+                    sh """
+                    mvn package oc:build
+                    mvn oc:resource oc:deploy
+                    """
                 }
                 }
             }
 
-
-
-        stage('Static code analysis: Sonarqube'){
-            when{expression{
-            params.action == 'create'
-        }}
-            steps{
-                script{
-
-                    def sonarqubeCredentialsId = 'sonarqube-api'
-                    statiCodeAnalysis(sonarqubeCredentialsId)
-                }
-                }
-            }
+        // stage('Integration Test Maven'){
+        //     when{expression{
+        //     params.action == 'create'
+        // }}
+        //     steps{
+        //         script{
+        //             mvnIntegrationTest()
+        //         }
+        //         }
+        //     }
 
 
 
-        stage('Quality Gate Status Check: Sonarqube'){
-            when{expression{
-            params.action == 'create'
-        }}
-            steps{
-                script{
+        // stage('Static code analysis: Sonarqube'){
+        //     when{expression{
+        //     params.action == 'create'
+        // }}
+        //     steps{
+        //         script{
 
-                    def sonarqubeCredentialsId = 'sonarqube-api'
-                    QualityGateStatus(sonarqubeCredentialsId)
-                }
-                }
-            }
-
-
-
-                    stage('Maven Build: maven'){
-            when{expression{
-            params.action == 'create'
-        }}
-            steps{
-                script{
-
-                    mvnBuild()
-                }
-                }
-            }
+        //             def sonarqubeCredentialsId = 'sonarqube-api'
+        //             statiCodeAnalysis(sonarqubeCredentialsId)
+        //         }
+        //         }
+        //     }
 
 
 
+        // stage('Quality Gate Status Check: Sonarqube'){
+        //     when{expression{
+        //     params.action == 'create'
+        // }}
+        //     steps{
+        //         script{
 
-                    stage('Docker Image Build'){
-            when{expression{
-            params.action == 'create'
-        }}
-            steps{
-                script{
-
-                    dockerBuild("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
-                }
-                }
-            }
-
-
-
-                    stage('Docker Image Scan: trivy'){
-            when{expression{
-            params.action == 'create'
-        }}
-            steps{
-                script{
-
-                    dockerImageScan("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
-                }
-                }
-            }
+        //             def sonarqubeCredentialsId = 'sonarqube-api'
+        //             QualityGateStatus(sonarqubeCredentialsId)
+        //         }
+        //         }
+        //     }
 
 
 
-                    stage('Docker Image Push: DockerHub'){
-            when{expression{
-            params.action == 'create'
-        }}
-            steps{
-                script{
+        //             stage('Maven Build: maven'){
+        //     when{expression{
+        //     params.action == 'create'
+        // }}
+        //     steps{
+        //         script{
 
-                    dockerImagePush("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
-                }
-                }
-            }
+        //             mvnBuild()
+        //         }
+        //         }
+        //     }
+
+
+
+
+        //             stage('Docker Image Build'){
+        //     when{expression{
+        //     params.action == 'create'
+        // }}
+        //     steps{
+        //         script{
+
+        //             dockerBuild("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+        //         }
+        //         }
+        //     }
+
+
+
+        //             stage('Docker Image Scan: trivy'){
+        //     when{expression{
+        //     params.action == 'create'
+        // }}
+        //     steps{
+        //         script{
+
+        //             dockerImageScan("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+        //         }
+        //         }
+        //     }
+
+
+
+        //             stage('Docker Image Push: DockerHub'){
+        //     when{expression{
+        //     params.action == 'create'
+        // }}
+        //     steps{
+        //         script{
+
+        //             dockerImagePush("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+        //         }
+        //         }
+        //     }
 
             
 
 
-                    stage('Docker Image Cleanup: DockerHub'){
-            when{expression{
-            params.action == 'create'
-        }}
-            steps{
-                script{
+        //             stage('Docker Image Cleanup: DockerHub'){
+        //     when{expression{
+        //     params.action == 'create'
+        // }}
+        //     steps{
+        //         script{
 
-                    dockerImageCleanup("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
-                }
-                }
-            }
+        //             dockerImageCleanup("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+        //         }
+        //         }
+        //     }
 
 
 
